@@ -18,14 +18,6 @@
 	
 	root.sd = sd;
 	
-	var _fibonacci = _.memoize(function(n) {
-      return n < 2 ? n : _fibonacci(n - 1) + _fibonacci(n - 2);
-    });
-	
-	var fibonacci = function(stack, n) {
-      return n < 2 ? n : stack[n - 1] + stack[n - 2];
-    };
-	
 	
 	/*	
 		If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. 
@@ -58,13 +50,63 @@
 			current = current+last;
 			last = tmp;
 			
-			console.log(current);
 			if(current % 2 ===0) result += current;
 		}
 		return result;
 	};
 	
+	sd.findHighestPrimeNumber = function(num){
+		if (num < 2) return 1;
+		
+		var sqrt = parseInt(Math.sqrt(num));
+		var max = 0;
+				
+		for(var i = sqrt; i> 0; i--){
+			if(num%i === 0 && sd.findHighestPrimeNumber(i)==1 && i>max){
+				max = i;
+			}
+		}
+		return max;		
+	};
+		
+	/*
+	The prime factors of 13195 are 5, 7, 13 and 29.
+	What is the largest prime factor of the number 600851475143 ?
+	*/
+	sd.problem3 = function(){
+		return sd.findHighestPrimeNumber(600851475143);		
+	};
 	
+	
+	sd.reverse = function(str){
+		return str.split("").reverse().join("");
+	};
+	
+	sd.isPalindrome = function(num){
+		return (''+num) === sd.reverse(''+num);
+	};
+	/*
+	A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+	Find the largest palindrome made from the product of two 3-digit numbers.
+	*/
+	sd.problem4 = function(){
+		var highest = 0;
+		var highestInner = 0;
+		
+		for(var outer = 999; outer>0; outer--){			
+			for(inner = 999; inner>0; inner--){			
+				// optimization - Saves us from looping over items that will always provide a smaller palindrome value
+				if(outer<highestInner) return highest; 		
+				
+				var t = inner*outer;
+				if(sd.isPalindrome(t) && t>highest) {
+					highest = t;
+					if(inner>highestInner) highestInner = inner;
+				}
+			}
+		}
+		return highest;
+	};
 	
 	
 
