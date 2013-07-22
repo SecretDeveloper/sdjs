@@ -86,7 +86,8 @@
 		return (''+num) === sd.reverse(''+num);
 	};
 	/*
-	A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+	A palindromic number reads the same both ways. 
+	The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
 	Find the largest palindrome made from the product of two 3-digit numbers.
 	*/
 	sd.problem4 = function(){
@@ -106,6 +107,56 @@
 			}
 		}
 		return highest;
+	};
+	
+	/*
+	2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+	What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+	*/
+	sd.problem5 = function(dividers, lower, upper){
+		var divisors = [];
+		if(!dividers){
+			console.log('no divisors provided');
+			divisors = [20,19,18,17,16,15,14,13,12,11];
+		}
+		else{
+			_.map(dividers.sort().reverse(), function(divider){
+				var alreadyCovered = false;
+				console.log(divider);
+				_.each(divisors, function(divisor){
+					if(divisor%divider===0) alreadyCovered = true;
+				});
+				if(!alreadyCovered && divider!==0) divisors.push(divider);  // only add 
+			});
+			console.log(dividers.sort().reverse());
+			console.log(divisors);			
+		}					
+		
+		// this upper/lower bounding stuff is psuedo math at best. no real truth here.
+		if(!upper){
+			console.log('no upper provided');
+			var top = _.reduce(divisors,function(memo,num){ return memo*=num; });
+			upper = parseInt(top * 0.001);  // Attempt to set an upper bound
+			console.log(upper);
+		}
+		if(!lower){
+			console.log('no lower provided');
+			lower = _.reduce(_.range(0,(''+upper).length-1),function(memo){return memo*10},2) //attempt to set a lower bound
+			console.log(lower);		
+		}
+		
+		// loop and try to match
+		for(var outer=lower; outer<upper; outer++){	
+			var match = true;
+			for(var x=0; x < divisors.length; x++){
+				if(outer%divisors[x] !==0) {
+					match = false;
+					break;
+				}
+			}
+			if(match) return outer;
+		}		
+		return 0;
 	};
 	
 	
